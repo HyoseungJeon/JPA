@@ -19,16 +19,19 @@ public class MaskingUtil {
      * @param dto
      * @return 성공여부
      */
-    public static boolean maskingDto(Object dto) {
+    public static void maskingDto(Object dto) {
         Field[] fields = dto.getClass().getDeclaredFields();
 
-        for (Field field : fields) {
-            if (field.isAnnotationPresent(Masking.class) || field.getType().equals(String.class))
-                break;
-            maskingField(field, dto);
+        if (List.class.isInstance(dto)) {
+            List<?> listDto = (List<?>) dto;
+            listDto.forEach(MaskingUtil::maskingDto);
+        } else {
+            for (Field field : fields) {
+                if (!field.isAnnotationPresent(Masking.class) || !field.getType().equals(String.class))
+                    continue;
+                maskingField(field, dto);
+            }
         }
-
-        return true;
     }
 
     private static void maskingField(Field field, Object dto) {
@@ -55,6 +58,26 @@ public class MaskingUtil {
         } else {
             StringJoiner stringJoiner = new StringJoiner(" ");
             switch (maskingType) {
+                case NAME: {
+                    if (str.length() > 2)
+                        result = str.replaceAll("(?<=.{1,2}).(?=.{1,2})", maskingEntity.getReplacement());
+                    else
+                        result = str.replaceAll("(?<=.{1,2}).(?=.{0,2})", maskingEntity.getReplacement());
+                    break;
+                }
+                case ADDRESS_BASE: {
+                    StringJoiner sj = new StringJoiner(" ");
+                    String[] splitStr = str.split("\\s");
+                    if (splitStr.length > 2) {
+                        sj.add(splitStr[0]).add(splitStr[1].replaceAll("(?<=.).", "*"));
+                        Arrays.stream(splitStr).skip(2).forEach(el -> {
+                            sj.add(el.replaceAll(".", "*"));
+                        });
+                    } else {
+                        result = str;
+                    }
+                    break;
+                }
             }
         }
         return result;
