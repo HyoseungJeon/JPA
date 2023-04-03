@@ -1,5 +1,7 @@
 package jpabook.jpashop.domain.dto;
 
+import jpabook.jpashop.annotation.Masking;
+import jpabook.jpashop.constant.MaskingType;
 import jpabook.jpashop.domain.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,16 +20,22 @@ public class OrderListDto {
 
     private OrderStatus status;
 
-    private MemberDto member;
+    @Masking(type = MaskingType.NAME)
+    private String memberName;
 
-    private List<OrderItemDto> orderItems = new ArrayList<>();
+    private OrderItemDto stanOrderItem;
+    private String itemName;
+    private int orderPrice;
+    private int count;
 
     public  OrderListDto(Order order) {
         this.id = order.getId();
         this.orderDate = order.getOrderDate();
         this.status = order.getStatus();
-        this.member = new MemberDto(order.getMember());
-        this.orderItems = order.getOrderItems().stream().map(item ->
-            new OrderItemDto(item)).collect(Collectors.toList());
+        this.memberName = order.getMember().getName();
+        this.stanOrderItem = new OrderItemDto(order.getOrderItems().get(0));
+        this.itemName = stanOrderItem.getItem().getName();
+        this.orderPrice = stanOrderItem.getOrderPrice();
+        this.count = stanOrderItem.getCount();
     }
 }
