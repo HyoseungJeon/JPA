@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jpabook.jpashop.utils.MaskingUtil.maskingDto;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -71,6 +73,7 @@ public class OrderService {
             OrderListDto orderListDto = new OrderListDto(el);
             orderListDtoList.add(orderListDto);
         });
+        maskingDto(orderListDtoList);
         return orderListDtoList;
     }
 }
