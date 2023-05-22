@@ -2,8 +2,6 @@ package jpabook.jpashop.controller;
 
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.domain.Order;
-import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.domain.dto.*;
 import jpabook.jpashop.domain.item.Book;
 import jpabook.jpashop.domain.item.Item;
@@ -12,8 +10,6 @@ import jpabook.jpashop.service.ItemService;
 import jpabook.jpashop.service.MemberService;
 import jpabook.jpashop.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
-import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -128,7 +124,7 @@ public class ShopController {
     }
 
     @GetMapping("orders")
-    public List<OrderListDto> getOrderList(@ModelAttribute OrderSearch orderSearch) {
+    public List<OrderListDto> getOrderList(@Validated @ModelAttribute OrderSearch orderSearch) {
 
         List<OrderListDto> orderList = orderService.searchOrders(orderSearch);
         return orderList;

@@ -28,7 +28,7 @@ public class OrderListDto {
     private int orderPrice;
     private int count;
 
-    public  OrderListDto(Order order) {
+    public OrderListDto(Order order) {
         this.id = order.getId();
         this.orderDate = order.getOrderDate();
         this.status = order.getStatus();

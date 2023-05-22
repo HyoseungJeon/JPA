@@ -10,14 +10,21 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
-#        show_sql: true
+        show_sql: true
         format_sql: true
+        default_batch_fetch_size: 100
   h2:
     console:
       enabled: true
 
-logging.level:
-  root: DEBUG
-  org.hibernate.SQL: debug
-  org.hibernate.type: trace
-  org.hibernate.orm.jdbc.bind: trace
+server:
+  error:
+    include-message: always
+    whitelabel:
+      enabled: false
+    include-exception: false
+#logging.level:
+#  root: DEBUG
+#  org.hibernate.SQL: debug
+#  org.hibernate.type: trace
+#  org.hibernate.orm.jdbc.bind: trace
