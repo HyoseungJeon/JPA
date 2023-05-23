@@ -39,10 +39,10 @@ public class MaskingUtil {
         field.setAccessible(true);
         try {
             field.set(dto, maskingString(MaskingType.valueOf(annotation.type().name()), String.valueOf(field.get(dto))));
-            field.setAccessible(false);
         } catch (IllegalAccessException e) {
-            field.setAccessible(false);
             throw new RuntimeException(e);
+        } finally {
+            field.setAccessible(false);
         }
     }
 
