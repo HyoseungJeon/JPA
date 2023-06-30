@@ -56,7 +56,6 @@ public class MaskingUtil {
         if(Objects.nonNull(maskingEntity) && StringUtils.hasText(maskingEntity.getRegex())) {
             result = str.replaceAll(maskingEntity.getRegex(), maskingEntity.getReplacement());
         } else {
-            StringJoiner stringJoiner = new StringJoiner(" ");
             switch (maskingType) {
                 case NAME: {
                     if (str.length() > 2)
