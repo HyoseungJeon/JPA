@@ -19,17 +19,19 @@ public class MaskingUtil {
      * @param dto
      * @return 성공여부
      */
-    public static void maskingDto(Object dto) {
-        Field[] fields = dto.getClass().getDeclaredFields();
+    public static void maskingDto(Object obj) {
+        if (Objects.isNull(obj)) return;
 
-        if (List.class.isInstance(dto)) {
-            List<?> listDto = (List<?>) dto;
-            listDto.forEach(MaskingUtil::maskingDto);
-        } else {
+        if (obj instanceof Collection) {
+			((Collection<?>) obj).forEach(MaskingUtil::mask);
+		} else if (obj.getClass().isArray()) {
+			Arrays.stream((Object[])obj).forEach(MaskingUtil::mask);
+		} else {
+            Field[] fields = obj.getClass().getDeclaredFields();
             for (Field field : fields) {
                 if (!field.isAnnotationPresent(Masking.class) || !field.getType().equals(String.class))
                     continue;
-                maskingField(field, dto);
+                maskingField(field, obj);
             }
         }
     }
