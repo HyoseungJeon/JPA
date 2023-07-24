@@ -23,10 +23,10 @@ public class MaskingUtil {
         if (Objects.isNull(obj)) return;
 
         if (obj instanceof Collection) {
-			((Collection<?>) obj).forEach(MaskingUtil::mask);
-		} else if (obj.getClass().isArray()) {
-			Arrays.stream((Object[])obj).forEach(MaskingUtil::mask);
-		} else {
+	    ((Collection<?>) obj).forEach(MaskingUtil::maskingDto);
+	} else if (obj.getClass().isArray()) {
+	    Arrays.stream((Object[])obj).forEach(MaskingUtil::maskingDto);
+	} else {
             Field[] fields = obj.getClass().getDeclaredFields();
             for (Field field : fields) {
                 if (!field.isAnnotationPresent(Masking.class) || !field.getType().equals(String.class))
